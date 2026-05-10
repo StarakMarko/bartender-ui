@@ -1,39 +1,41 @@
 import { Wine, Martini, Beer, CupSoda, GlassWater } from 'lucide-react';
 
 export const INGREDIENTS = {
-  pump1: "Горілка",
-  pump2: "Спрайт",
-  pump3: "Ром",
-  pump4: "Кола"
+  pump1: "Vodka",
+  pump2: "Triple Sec",
+  pump3: "Cranberry Juice",
+  pump4: "Lemon Juice"
 };
 
 export const PREDEFINED_COCKTAILS = [
   {
-    id: 'vodka_sprite',
-    name: 'Vodka Sprite',
-    desc: 'Класика: Горілка з лимонадом',
+    id: 'cosmopolitan',
+    name: 'Cosmopolitan',
     icon: Martini,
-    recipe: { pump1: 50, pump2: 150, pump3: 0, pump4: 0 }
+    recipe: { pump1: 45, pump2: 15, pump3: 30, pump4: 15 }
   },
   {
-    id: 'rum_cola',
-    name: 'Rum Cola',
-    desc: 'Ром з колою',
-    icon: Wine,
-    recipe: { pump1: 0, pump2: 0, pump3: 50, pump4: 150 }
+    id: 'kamikaze',
+    name: 'Kamikaze',
+    icon: GlassWater,
+    recipe: { pump1: 30, pump2: 30, pump3: 0, pump4: 30 }
   },
   {
-    id: 'citrus_mix',
-    name: 'Citrus Mix',
-    desc: 'Освіжаючий цитрусовий мікс',
+    id: 'cape_codder',
+    name: 'Cape Codder',
     icon: CupSoda,
-    recipe: { pump1: 30, pump2: 100, pump3: 30, pump4: 100 }
+    recipe: { pump1: 50, pump2: 0, pump3: 150, pump4: 0 }
   },
   {
-    id: 'strong_shot',
-    name: 'Strong Shot',
-    desc: 'Міцний шот',
-    icon: Beer,
-    recipe: { pump1: 40, pump2: 0, pump3: 40, pump4: 0 }
+    id: 'lemon_drop',
+    name: 'Lemon Drop',
+    icon: Martini,
+    recipe: { pump1: 50, pump2: 20, pump3: 0, pump4: 30 }
+  },
+  {
+    id: 'cranberry_sour',
+    name: 'Cranberry Sour',
+    icon: Wine,
+    recipe: { pump1: 50, pump2: 0, pump3: 50, pump4: 20 }
   }
 ];

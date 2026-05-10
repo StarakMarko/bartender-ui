@@ -81,13 +81,13 @@ function App() {
 
   const handleSaveCustomRecipe = () => {
     if (!customCocktailName.trim()) {
-      setToastMessage('Введіть назву коктейлю');
+      setToastMessage('Enter cocktail name');
       setStatus('error');
       return;
     }
     const totalVolume = Object.values(customRecipe).reduce((a, b) => a + b, 0);
     if (totalVolume === 0) {
-      setToastMessage('Рецепт не може бути порожнім');
+      setToastMessage('Recipe cannot be empty');
       setStatus('error');
       return;
     }
@@ -95,7 +95,6 @@ function App() {
     const newCocktail = {
       id: 'custom_' + Date.now(),
       name: customCocktailName.trim(),
-      desc: 'Власний рецепт',
       recipe: { ...customRecipe }
     };
     
@@ -103,7 +102,7 @@ function App() {
     setSavedCocktails(newSavedList);
     localStorage.setItem('savedCocktails', JSON.stringify(newSavedList));
     
-    setToastMessage('Рецепт збережено!');
+    setToastMessage('Recipe saved!');
     setStatus('success');
     setCustomCocktailName('');
     setSelectedPredefined(newCocktail.id);
@@ -115,7 +114,7 @@ function App() {
     
     if (mode === 'predefined') {
       if (!selectedPredefined) {
-        setToastMessage('Будь ласка, оберіть коктейль');
+        setToastMessage('Please select a cocktail');
         setStatus('error');
         return;
       }
@@ -134,7 +133,7 @@ function App() {
       // Check if custom recipe is all 0
       const totalVolume = Object.values(customRecipe).reduce((a, b) => a + b, 0);
       if (totalVolume === 0) {
-        setToastMessage('Рецепт не може бути порожнім');
+        setToastMessage('Recipe cannot be empty');
         setStatus('error');
         return;
       }
@@ -145,7 +144,7 @@ function App() {
     
     try {
       await saveRecipe(selectedGlass, finalRecipe);
-      setToastMessage(`Коктейль готується у склянці ${selectedGlass}!`);
+      setToastMessage(`Cocktail is being prepared in glass ${selectedGlass}!`);
       setStatus('success');
       
       // Reset selections if needed
@@ -154,7 +153,7 @@ function App() {
       }
     } catch (error) {
       console.error(error);
-      setToastMessage('Помилка з\'єднання з роботом');
+      setToastMessage('Error connecting to robot');
       setStatus('error');
     }
   };
@@ -162,13 +161,13 @@ function App() {
   return (
     <div className="app-container">
       <h1>Cyber Bartender</h1>
-      <p className="subtitle">Оберіть склянку та коктейль для приготування</p>
+      <p className="subtitle">Select glass and cocktail for preparation</p>
 
       <div className="glass-panel">
         {/* Glass Selection */}
         <div className="glasses-container circular">
           {[1, 2, 3, 4, 5].map((num, index) => {
-            const angle = (index * 72 - 90) * (Math.PI / 180);
+            const angle = (-126 - index * 72) * (Math.PI / 180);
             const radius = 100; // px
             const x = Math.cos(angle) * radius;
             const y = Math.sin(angle) * radius;
@@ -191,7 +190,7 @@ function App() {
           
           <div className="center-glass-info">
              <div className="status-dot" style={{ backgroundColor: glassStatuses[selectedGlass] ? '#eab308' : '#22c55e' }}></div>
-             <span>{glassStatuses[selectedGlass] ? 'У процесі' : 'Готово'}</span>
+             <span>{glassStatuses[selectedGlass] ? 'In progress' : 'Ready'}</span>
           </div>
         </div>
 
@@ -201,13 +200,13 @@ function App() {
             className={`tab-btn ${mode === 'predefined' ? 'active' : ''}`}
             onClick={() => setMode('predefined')}
           >
-            Готові коктейлі
+            Cocktails
           </button>
           <button 
             className={`tab-btn ${mode === 'custom' ? 'active' : ''}`}
             onClick={() => setMode('custom')}
           >
-            Свій рецепт
+            Custom recipe
           </button>
           <button 
             className="tab-btn"
@@ -221,7 +220,7 @@ function App() {
               opacity: isRandomizing ? 0.5 : 1,
               cursor: isRandomizing ? 'not-allowed' : 'pointer'
             }}
-            title="Випадковий коктейль"
+            title="Random cocktail"
           >
             <Dices size={20} className={isRandomizing ? 'spinner' : ''} />
           </button>
@@ -254,7 +253,7 @@ function App() {
                             setSelectedPredefined(null);
                           }
                         }}
-                        title="Видалити рецепт"
+                        title="Delete recipe"
                       >
                         <Trash2 size={16} />
                       </div>
@@ -270,15 +269,14 @@ function App() {
                     </div>
                     <Icon className="cocktail-icon" size={32} />
                     <div className="cocktail-name">{cocktail.name}</div>
-                    <div className="cocktail-desc">{cocktail.desc}</div>
                     
                     {isExpanded && (
                       <div className="cocktail-recipe-details">
-                        <div className="recipe-title">Склад:</div>
+                        <div className="recipe-title">Ingredients:</div>
                         {Object.entries(cocktail.recipe).map(([pump, value]) => {
                           if (value > 0) {
                             const num = pump.replace('pump', '');
-                            return <div key={pump}>{num}. {INGREDIENTS[pump]}: {value} од.</div>;
+                            return <div key={pump}>{num}. {INGREDIENTS[pump]}: {value} ml</div>;
                           }
                           return null;
                         })}
@@ -294,9 +292,9 @@ function App() {
                 <div className="pump-header">
                   <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <Droplets size={20} color="var(--primary)" />
-                    Загальний об'єм коктейлю
+                    Total cocktail volume
                   </span>
-                  <span className="pump-value">{predefinedVolume} мл</span>
+                  <span className="pump-value">{predefinedVolume} ml</span>
                 </div>
                 <input 
                   type="range" 
@@ -322,7 +320,7 @@ function App() {
                         <Droplets size={20} color="var(--primary)" />
                         {num}. {INGREDIENTS[pumpKey]}
                       </span>
-                      <span className="pump-value">{customRecipe[pumpKey]} мл</span>
+                      <span className="pump-value">{customRecipe[pumpKey]} ml</span>
                     </div>
                     <input 
                       type="range" 
@@ -343,7 +341,7 @@ function App() {
                  type="text" 
                  value={customCocktailName}
                  onChange={e => setCustomCocktailName(e.target.value)}
-                 placeholder="Назва вашого міксу"
+                 placeholder="Your mix name"
                  style={{ flex: 1, minWidth: '200px', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--panel-border)', background: 'rgba(0,0,0,0.2)', color: 'white', fontFamily: 'inherit' }}
                />
                <button 
@@ -353,7 +351,7 @@ function App() {
                  onMouseOut={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
                >
                  <Save size={20} />
-                 Зберегти рецепт
+                 Save recipe
                </button>
             </div>
           </div>
@@ -368,10 +366,10 @@ function App() {
           {status === 'loading' ? (
             <>
               <Loader2 className="spinner" size={24} />
-              Надсилання...
+              Sending...
             </>
           ) : (
-            'Налити коктейль'
+            'Pour cocktail'
           )}
         </button>
       </div>
